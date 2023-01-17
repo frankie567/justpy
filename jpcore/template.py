@@ -74,7 +74,9 @@ class Context:
         return html
     
     def as_script_src(self,file_name:str, indent:str="  ", subdir=""):
-        src= f"{indent}<script src='/templates/js/{subdir}/{file_name}.js'></script>\n"
+        subdir_path = f"{subdir}/" if subdir else ""
+        src_file = self.get_url_for("templates", f"/js/{subdir_path}{file_name}.js")
+        src= f"{indent}<script src='{src_file}'></script>\n"
         return src
     
     def as_script_srcs(self,indent:str="  "):
