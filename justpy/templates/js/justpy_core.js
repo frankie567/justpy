@@ -172,11 +172,7 @@ class JustpyCore {
 		} else {
 			protocol_string = 'ws://'
 		}
-		var ws_url = protocol_string + document.domain;
-		if (location.port) {
-			ws_url += ':' + location.port;
-		}
-		socket = new WebSocket(ws_url);
+		socket = new WebSocket(window.justPyWebSocketURL);
 
 		socket.addEventListener('open', function(event) {
 			console.log('Websocket opened');
