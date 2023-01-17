@@ -33,7 +33,7 @@ class Context:
         justpy_dict_js=str(self.context_dict.get("justpy_dict","[]"))
         self.justpy_dict_js=justpy_dict_js.replace('</' + 'script>', '</" + "script>')
 
-    def get_url_for(self, name: str, path: str = None):
+    def get_url_for(self, name: str, **path_params):
         """
         get url for the given route name
         Args:
@@ -43,9 +43,7 @@ class Context:
         url = None
         request = self.context_dict.get("request")
         if request is not None and isinstance(request, Request):
-            if path is None:
-                path = ""
-            url = request.url_for(name, path=path)
+            url = request.url_for(name, **path_params)
         return url
     
     def get_js_option(self,key,default_value):
@@ -75,7 +73,7 @@ class Context:
     
     def as_script_src(self,file_name:str, indent:str="  ", subdir=""):
         subdir_path = f"{subdir}/" if subdir else ""
-        src_file = self.get_url_for("templates", f"/js/{subdir_path}{file_name}.js")
+        src_file = self.get_url_for("templates", path=f"/js/{subdir_path}{file_name}.js")
         src= f"{indent}<script src='{src_file}'></script>\n"
         return src
     
