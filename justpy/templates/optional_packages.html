@@ -6,6 +6,7 @@
     <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.js"></script>
     {%- else %}
     <script src="{{ url_for('templates', path='/local/ag-grid-community.js') }}"></script>
+    {%- endif %}
 {%- endif %}
 {%- if options.aggrid_enterprise %}
     {%- if not options.no_internet %}
