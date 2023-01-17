@@ -1,12 +1,12 @@
-# Chart Custom Components 
+# Chart Custom Components
 
-Components in JustPy are Python classes that inherit from other JustPy components. Components that inherit from HighCharts can also be defined. For example, below we define and use a pie chart component. 
+Components in JustPy are Python classes that inherit from other JustPy components. Components that inherit from HighCharts can also be defined. For example, below we define and use a pie chart component.
 
 ## Pie Chart Component
+[Pie Chart Component live demo]({{demo_url}}/pie_test)
 
 ```python
 import justpy as jp
-
 
 class MyPie(jp.HighCharts):
 
@@ -66,6 +66,7 @@ jp.justpy(pie_test)
 The chart instance that is created can be further modified by changing its options. In the example above we change the chart title and the name of the series.
 
 ## Histogram Component
+[Histogram Component live demo]({{demo_url}}/histogram_test)
 
 A component that comes with JustPy is Histogram. It simplifies creating a histogram chart. In this example, we include the  definition.
 
@@ -88,7 +89,7 @@ class Histogram(jp.HighCharts):
         title: { text: 'Data' },
         alignTicks: false
     }, {
-        title: { text: 'Histogram' },
+        title: { text: 'MyHistogram' },
         alignTicks: false,
         opposite: true
     }],
@@ -96,7 +97,7 @@ class Histogram(jp.HighCharts):
     yAxis: [{
         title: { text: 'Data' }
     }, {
-        title: { text: 'Histogram' },
+        title: { text: 'MyHistogram' },
         opposite: true
     }],
 
@@ -106,7 +107,8 @@ class Histogram(jp.HighCharts):
         xAxis: 1,
         yAxis: 1,
         baseSeries: 's1',
-        zIndex: -1
+        zIndex: -1,
+        color: '#FF530D'
     }, {
         name: 'Data',
         type: 'scatter',
@@ -129,11 +131,11 @@ def histogram_test(request):
     wp = jp.WebPage()
     # Uniform distribution
     data = [random.randrange(10) for i in range(100)]
-    chart = jp.Histogram(data, a=wp, classes='m-2 border w-1/2')
+    chart = Histogram(data, a=wp, classes='m-2 border w-1/2')
     chart.options.title.text = 'Uniform Distribution Histogram'
     # Normal distribution
     data = [numpy.random.normal() for i in range(1000)]
-    chart = jp.Histogram(data, a=wp, classes='m-2 border w-1/2')
+    chart = jp.Histogram(data, a=wp, classes='m-2 border w-1/2')  # here we use the Histogram that comes with justpy
     chart.options.title.text = 'Normal Distribution Histogram'
     return wp
 
@@ -142,12 +144,12 @@ jp.justpy(histogram_test)
 ```
 
 The Histogram class relies on a [chart definition](https://www.highcharts.com/docs/chart-and-series-types/histogram-series) from the Highcharts documentation.
- 
+
 Encompassing the chart definition in a class simplifies its use. If you build such classes for your favorite charts, please send them to me to include in JustPy. Once the Histogram class (component) is defined, reusing it is simple and does not require remembering the specifics of the Highcharts API. The instance of HighCharts can be further modified. In the example above, we change the chart titles after the chart has been created.
 
 ## Scatter with Regression
-
-Let's build a component that automatically adds a regression line to a scatter chart. We will use the predefined JustPy Scatter component. 
+[Scatter with Regression live demo]({{demo_url}}/scatter_test)
+Let's build a component that automatically adds a regression line to a scatter chart. We will use the predefined JustPy Scatter component.
 
 ```python
 import justpy as jp
@@ -185,7 +187,3 @@ jp.justpy(scatter_test)
 ```
 
 The new component adds another series to the chart. This series has only two points which are the regression values of the smallest and largest x values. The line between them is the regression line. We now have a component we can reuse to plot a scatter plot with a regression line.
-
-
-
-

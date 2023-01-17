@@ -2,13 +2,13 @@
 
 ## Introduction
 
-JustPy provides several way of working directly with HTML. 
+JustPy provides several way of working directly with HTML.
 
 If you don't need any events associated with your HTML just set the `inner_html` of a Div instance as described below.
 
 In order to interact with the HTML, you need to use `parse_html` to convert the HTML to JustPy commands that create the appropriate elements. You can then assign event handlers to the elements.
 
-##  The <span style="color: red;">inner_html</span> Attribute
+##  The inner_html Attribute
 
 You can set the content of an element by assigning a HTML string to the element's `inner_html` attribute. This is the preferred method if you don't need to interact with the HTML. As a general rule, if you are not using the `name_dict` attribute created by `parse_html`, you probably should use `inner_html` instead.
 
@@ -36,7 +36,7 @@ jp.justpy(inner_demo)
 ```
 
 !!! warning
-    if you set `inner_html`, it will override any other content of your component. 
+    if you set `inner_html`, it will override any other content of your component.
 
 ## Inserting HTML at the WebPage level
 
@@ -58,14 +58,14 @@ jp.justpy(html_demo)
 If the `html` attribute is set, all other additions to the page will be ignored.
 
 
-## The <span style="color: red;">parse_html</span> Function
+## The parse_html Function
 
 To convert HTML to JustPy elements, use the `parse_html` function.
 
 ```python
 import justpy as jp
 
-async def parse_demo(request):
+async def parse_demo1(request):
     wp = jp.WebPage()
     c = jp.parse_html("""
     <div>
@@ -78,7 +78,7 @@ async def parse_demo(request):
     print(c.components)
     return wp
 
-jp.justpy(parse_demo)
+jp.justpy(parse_demo1)
 ```
 
 Run the program above. It renders the HTML on the page. The two `print` commands output the following:
@@ -88,19 +88,19 @@ Div(id: 1, html_tag: div, vue_type: html_component, number of components: 3)
 ```
 
 The printout shows that `c` is a `Div` component that has 3 child components that are `P` components. The parsing function takes HTML and creates JustPy elements with the right relationships between them. It returns the topmost component if there is only one. If there are two or more siblings at the top level, it wraps them with a Div and returns the div. You can think of `parse_html` as returning the element at the base of the HTML tree.
- 
+
 There are several way to access the child components. For example, in our specific case the first paragraph is the first child of `c` and therefore can be accessed as `c.components[0]`.
 
-### The <span style="color: red;">name_dict</span> dictionary
+### The name_dict dictionary
 
-A more general way to access parsed elements is to use the `name` attribute inside the HTML. The function `parse_html` attaches to the component it returns an attribute called `name_dict`, that as its name implies, is a dictionary whose keys are the name attributes and its values are the components they correspond to. 
+A more general way to access parsed elements is to use the `name` attribute inside the HTML. The function `parse_html` attaches to the component it returns an attribute called `name_dict`, that as its name implies, is a dictionary whose keys are the name attributes and its values are the components they correspond to.
 
 Here is an example:
 
 ```python
 import justpy as jp
 
-async def parse_demo(request):
+async def parse_demo2(request):
     wp = jp.WebPage()
     c = jp.parse_html("""
     <div>
@@ -115,7 +115,7 @@ async def parse_demo(request):
     p2.on('click', my_click)
     return wp
 
-jp.justpy(parse_demo)
+jp.justpy(parse_demo2)
 ```
 
 If you click the second paragraph, its text will change. Notice that we added `name="p2"` to the HTML of the second paragraph. When the parser sees the name attribute it creates an entry in `name_dict` with the name as the key and the component as the value.
@@ -128,14 +128,14 @@ If more than one element is given the same name in the HTML text, the dictionary
 Along with parse_html there are two additional functions in JustPy to parse HTML: `parse_html_file` parses a file instead of a string and `parse_html_file_async` is a co-routine that does the same asynchronously.  
 
 
-### The <span style="color: red;">commands</span> attribute
+### The commands attribute
 
-The `commands` attribute is created by `parse_html` and includes a list of the Python commands (represented as strings) needed to create the element in the JustPy framework. 
+The `commands` attribute is created by `parse_html` and includes a list of the Python commands (represented as strings) needed to create the element in the JustPy framework.
 
 ```python
 import justpy as jp
 
-def commands_demo():
+def commands_demo1():
     wp = jp.WebPage()
     c = jp.parse_html("""
         <div>
@@ -160,7 +160,7 @@ def commands_demo():
         jp.Div(text=i, classes='font-mono ml-2', a=wp)
     return wp
 
-jp.justpy(commands_demo)
+jp.justpy(commands_demo1)
 ```
 
 The `command_prefix` keyword argument allows specifying the prefix for the commands. The default is 'jp.'
@@ -169,11 +169,11 @@ The `command_prefix` keyword argument allows specifying the prefix for the comma
     All non blank prefixes should have the '.' (period) as their last character
 
 We can then use the commands to generate the output we need without parsing HTML:
-
+### commands result usage example
 ```python
 import justpy as jp
 
-def commands_demo():
+def commands_demo2():
     wp = jp.WebPage()
     root = jp.Div(a=wp)
     c1 = jp.Div(a=root)
@@ -182,14 +182,14 @@ def commands_demo():
     c4 = jp.P(classes='m-2 p-2 text-green-500 text-xl', a=c1, text='Paragraph 3')
     return wp
 
-jp.justpy(commands_demo)
+jp.justpy(commands_demo2)
 ```
 
 The only change needed to the commands is to add `root` to the page.
 
 ### parse_html limitations
 
-The parser does not handle correctly HTML in which top level text is divided. 
+The parser does not handle correctly HTML in which top level text is divided.
 
 The following HTML will not parse correctly:
 ```html

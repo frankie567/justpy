@@ -19,8 +19,10 @@ This guide/tutorial is far from complete and I will be adding examples to it ove
 
 ## Example
 
-The following example puts some Quasar buttons on the page and toggles their color and label when they are clicked. Also, clicking any button toggles the dark mode of the page. 
- 
+### QBtn example
+[QBtn example live demo]({{demo_url}}/quasar_example1)
+The following example puts some Quasar buttons on the page and toggles their color and label when they are clicked. Also, clicking any button toggles the dark mode of the page.
+
 ```python
 import justpy as jp
 import random
@@ -32,7 +34,7 @@ async def my_click(self, msg):
     msg.page.dark = not msg.page.dark
     await msg.page.set_dark_mode(msg.page.dark)
 
-def quasar_example():
+def quasar_example1():
     wp = jp.QuasarPage(dark=True)  # Load page in dark mode
     d = jp.Div(classes='q-pa-md q-gutter-sm', a=wp)
     jp.QBtn(color='primary', icon='mail', label='On Left', a=d, click=my_click)
@@ -42,16 +44,16 @@ def quasar_example():
     jp.QBtn(icon='phone', label='Stacked', stack=True, glossy=True, color='purple', a=d, click=my_click)
     return wp
 
-jp.justpy(quasar_example)
+jp.justpy(quasar_example1)
 ```
 
 The program uses the JustPy QBtn component which is based on the [Quasar QBtn component](https://quasar.dev/vue-components/button). Click the buttons and notice the ripple effect which is part of the Material specification.
 
 ## props of Quasar components
 
-The JustPy component usually supports all the Quasar component options (in the Quasar docs these are called `props`). In JustPy these are designated by setting the attributes of the element. This can be done at creation using keywords or later using standard attribute assignment. 
+The JustPy component usually supports all the Quasar component options (in the Quasar docs these are called `props`). In JustPy these are designated by setting the attributes of the element. This can be done at creation using keywords or later using standard attribute assignment.
 
-Quasar props are in kebab case: `icon-right` 
+Quasar props are in kebab case: `icon-right`
 In JustPy the attribute names are in snake case: `icon_right`
 
 If a quasar prop is set just by specifying it, in JustPy you set the corresponding attribute to `True`.
@@ -79,7 +81,7 @@ In the example below we add an icon to several QInput slots.
 ```python
 import justpy as jp
 
-def input_test(request):
+def input_test1(request):
     wp = jp.QuasarPage()
     c1 = jp.Div(classes='q-pa-md', a=wp)
     c2 = jp.Div(classes='q-gutter-md', style='max-width: 300px', a=c1)
@@ -90,7 +92,7 @@ def input_test(request):
         setattr(in1, slot + '_slot', icon1)
     return wp
 
-jp.justpy(input_test)
+jp.justpy(input_test1)
 
 ```
 
@@ -102,6 +104,7 @@ in1.append_slot = e
 Just add '_slot' to the slot name and treat it as an instance attribute.
 
 ## Parsing Quasar Tags
+[Parsing Quasar Tags live demo]({{demo_url}}/quasar_example2)
 
 The JustPy `parse_html` function recognizes Quasar tags. This is convenient as it allows using examples in the Quasar documentation. The example below was taken from the [QList documentation](https://quasar.dev/vue-components/list-and-list-items).
 
@@ -199,14 +202,18 @@ html_string = """
   </div>
 """
 
-def quasar_example():
+def quasar_example2():
+    """
+    Show parsing and command generation
+    """
     wp = jp.QuasarPage()
-    c = jp.parse_html(html_string, a=wp)
-    for i in c.commands:
+    div_root_component = jp.parse_html(html_string, a=wp)
+    # print out all commands on console
+    for i in div_root_component.commands:
         print(i)
     return wp
 
-jp.justpy(quasar_example)
+jp.justpy(quasar_example2)
 ```
 
 
@@ -219,10 +226,12 @@ JustPy supports the following Quasar Vue directives:
 
 !!! info "Use QDiv instead of Div if you want to apply directives on an element."
 
+### QDiv to apply Quasar Directives
+
 ```python
 import justpy as jp
 
-def quasar_example():
+def quasar_example3():
     wp = jp.QuasarPage()
     d = jp.Div(classes='q-pa-md row justify-center', a=wp)
     jp.QDiv(v_ripple=True, classes='relative-position flex flex-center text-white bg-primary',
@@ -230,20 +239,27 @@ def quasar_example():
                 a=d, text='Click/tap me')
     return wp
 
-jp.justpy(quasar_example)
+jp.justpy(quasar_example3)
 ```
 
 The value of the directive can be a dictionary for configuring more options:
-
+### QDiv directive as dictionary
+[Ripple Example live demo]({{demo_url}}/ripple_test)
 ```python
 import justpy as jp
 # https://quasar.dev/vue-directives/material-ripple#Ripple-API
 
 def ripple_test():
+    """
+    show the Quasar ripple effect
+    """
     wp = jp.QuasarPage()
     d = jp.QDiv(classes="q-pa-md q-gutter-md row justify-center", a=wp)
-    d1 = jp.QDiv(v_ripple={'center': True, 'color': 'orange-5'}, classes="relative-position container bg-grey-3 text-black inline flex flex-center", text='center',
-                 style='border-radius: 50%; cursor: pointer; width: 150px; height: 150px', a=d)
+    d1 = jp.QDiv(
+      v_ripple={'center': True, 'color': 'orange-5'},
+      classes="relative-position container bg-grey-3 text-black inline flex flex-center",
+      text='center',
+      style='border-radius: 50%; cursor: pointer; width: 150px; height: 150px', a=d)
     return wp
 
 jp.justpy(ripple_test)
@@ -282,4 +298,3 @@ def bar_example():
 jp.justpy(bar_example)
 
 ```
-

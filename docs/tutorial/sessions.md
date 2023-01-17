@@ -137,7 +137,7 @@ async def login_test(request):
 
             def log_out(self, msg):
                 users[self.s_id]['logged_in'] = False
-                msg.page.redirect = '/login_test'
+                msg.page.redirect = '/'
 
             log_out_btn.on('click', log_out)
 
@@ -152,7 +152,7 @@ async def login_test(request):
         return await login_page(request)  # Return different page if not logged in
     return wp
 
-@jp.SetRoute('/login')
+@jp.SetRoute('/login_test')
 async def login_page(request):
     try:
         if users[request.session_id]['logged_in']:

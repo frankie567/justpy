@@ -5,24 +5,26 @@
 The `model` attribute is a special one in JustPy. You don't need to use it, but if you do, it may make your code more concise and readable. It is an elegant and simple way to share data between independent components (it was inspired by the [`v-model`](https://vuejs.org/v2/api/#v-model) directive in Vue.js and works in a similar manner).
 
 Try running the following program and typing into the input field in the browser:
+
+### Input field demo
 ```python
 import justpy as jp
 
-async def input_demo(request):
+async def input_demo_model1(request):
     wp = jp.WebPage(data={ 'text': 'Initial text'})
     input_classes = "m-2 bg-gray-200 appearance-none border-2 border-gray-200 rounded xtw-64 py-2 px-4 text-gray-700 focus:outline-none focus:bg-white focus:border-purple-500"
     jp.Input(a=wp, classes=input_classes, placeholder='Please type here', model=[wp, 'text'])
     jp.Div(model=[wp, 'text'], classes='m-2 p-2 h-32 text-xl border-2 overflow-auto', a=wp)
     return wp
 
-jp.justpy(input_demo)
+jp.justpy(input_demo_model1)
 ```
 
-Text entered in an input field is reflected in a div on the page. The connection between the input and the div is made using the `model` and `data` attributes. Notice that when we create the web page, we initialize a `data` attribute. The `data` attribute must be a Python dictionary. In our case it is a dictionary with one entry. The key is 'text' and the value is 'Initial text'. 
+Text entered in an input field is reflected in a div on the page. The connection between the input and the div is made using the `model` and `data` attributes. Notice that when we create the web page, we initialize a `data` attribute. The `data` attribute must be a Python dictionary. In our case it is a dictionary with one entry. The key is 'text' and the value is 'Initial text'.
 
 When we create the Input element, we add the following to its keyword arguments: `model=[wp, 'text']`
 
-This tells the Input instance that it will model itself based on the value under the 'text' key in `wp`'s data. For an Input element this means that when rendered it will take its value from `wp.data['text']` AND when its value is changed due to an input event, it will set `wp.data['text']` to its new value. 
+This tells the Input instance that it will model itself based on the value under the 'text' key in `wp`'s data. For an Input element this means that when rendered it will take its value from `wp.data['text']` AND when its value is changed due to an input event, it will set `wp.data['text']` to its new value.
 
 !!! note
     It is important to understand that in the case of Input, `model` has a two way influence. It gets its value from the appropriate data attribute and when an input event occurs it changes the appropriate data attribute.
@@ -32,11 +34,11 @@ In the case of a Div element the relation is only one way. Its text attribute is
 If an element has an input event, the model attribute works in two directions, otherwise just in one. For two directional elements the attribute changed is value while for one directional ones the attribute changed is text.
 
 How is this useful? Let's put three divs on the page instead of just one:
-
+### Input field demo with three divs
 ```python
 import justpy as jp
 
-async def input_demo(request):
+async def input_demo_model2(request):
     wp = jp.WebPage(data={'text': 'Initial text'})
     input_classes = "m-2 bg-gray-200 appearance-none border-2 border-gray-200 rounded xtw-64 py-2 px-4 text-gray-700 focus:outline-none focus:bg-white focus:border-purple-500"
     jp.Input(a=wp, classes=input_classes, placeholder='Please type here', model=[wp, 'text'])
@@ -44,16 +46,18 @@ async def input_demo(request):
         jp.Div(model=[wp, 'text'], classes='m-2 p-2 h-32 text-xl border-2 overflow-auto', a=wp)
     return wp
 
-jp.justpy(input_demo)
+jp.justpy(input_demo_model2)
 ```
 
 Since all Div instances have the same model, they change when we type. Without the model attribute, implementing this would be more verbose.
 
 Now let's duplicate the Inputs. Let's have five Inputs instead of one:
+
+### Input field demo with five Inputs
 ```python
 import justpy as jp
 
-async def input_demo(request):
+async def input_demo_model3(request):
     wp = jp.WebPage(data={'text': 'Initial text'})
     input_classes = "m-2 bg-gray-200 appearance-none border-2 border-gray-200 rounded xtw-64 py-2 px-4 text-gray-700 focus:outline-none focus:bg-white focus:border-purple-500"
     for _ in range(5):
@@ -62,19 +66,21 @@ async def input_demo(request):
         jp.Div(model=[wp, 'text'], classes='m-2 p-2 h-32 text-xl border-2 overflow-auto', a=wp)
     return wp
 
-jp.justpy(input_demo)
+jp.justpy(input_demo_model3)
 ```
 
 Type into any one of the five Input fields and see what happens. Since all elements share the same model, they all change in tandem. We didn't need to write any event handler.
 
 Let's make a small modification to the program and add a reset button that will clear all the elements on the page:
+
+### Input field demo with reset button
 ```python
 import justpy as jp
 
 def reset_all(self, msg):
     msg.page.data['text'] = ''
 
-async def input_demo(request):
+async def input_demo_model4(request):
     wp = jp.WebPage(data={'text': 'Initial text'})
     button_classes = 'w-32 m-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
     b = jp.Button(text='Reset', click=reset_all, a=wp, classes=button_classes)
@@ -86,12 +92,12 @@ async def input_demo(request):
         jp.Div(model=[wp, 'text'], classes='m-2 p-2 h-32 text-xl border-2 overflow-auto', a=wp)
     return wp
 
-jp.justpy(input_demo)
+jp.justpy(input_demo_model4)
 ```
 
 When the button is clicked, the following command in `reset_all` is executed: `msg.page.data['text'] = ''`
 
-Since all the Inputs and Divs are modeled after this dictionary entry, they are all reset to the empty string when the button is clicked. 
+Since all the Inputs and Divs are modeled after this dictionary entry, they are all reset to the empty string when the button is clicked.
 
 !!! note
     Any element, a Div for example, may have a data attribute and be used in a model attribute, not just a WebPage.
@@ -105,12 +111,13 @@ With the `model` and `data` attributes you can easily propagate a change in one 
 
 The following program is the base one we will expand on. It uses `model` in the same way as examples above.
 
+### use of model
 ```python
 import justpy as jp
 
 corner_classes = 'p-3 absolute bg-gray-200 '
 
-def model_demo():
+def model_demo1():
     wp = jp.WebPage()
     d = jp.Div(classes='relative h-screen bg-gray-600', a=wp, data={'text': ''})
     for v_pos in ['top', 'bottom']:
@@ -122,14 +129,15 @@ def model_demo():
                             placeholder='Type here', style='top: 50%; left: 40%', model=[d, 'text'], a=d)
     return wp
 
-jp.justpy(model_demo)
-``` 
+jp.justpy(model_demo1)
+```
 
-When you type text into `middle_input` it shows up in the four corners of the window. In each corner there is a Div that contains two other Divs. The second Div has the `model` property and the text in it changes when the user types into `middle_input`'`. 
+When you type text into `middle_input` it shows up in the four corners of the window. In each corner there is a Div that contains two other Divs. The second Div has the `model` property and the text in it changes when the user types into `middle_input`'`.
 
 If we want the corners to show the text "Nothing typed yet" when `middle_input` is empty, the best way to implement this, is by creating a new component with a more sophisticated `model` handling method.
 
 The program would look like this:
+### more sophisticated use of model
 ```python
 import justpy as jp
 
@@ -145,7 +153,7 @@ class MyDiv(jp.Div):
             self.text = "Nothing typed yet"
 
 
-def model_demo():
+def model_demo2():
     wp = jp.WebPage()
     d = jp.Div(classes='relative h-screen bg-gray-600', a=wp, data={'text': ''})
     for v_pos in ['top', 'bottom']:
@@ -157,10 +165,10 @@ def model_demo():
                             placeholder='Type here', style='top: 50%; left: 40%', model=[d, 'text'], a=d)
     return wp
 
-jp.justpy(model_demo)
+jp.justpy(model_demo2)
 ```
 
-We define a new component, `MyDiv` that inherits from `Div` and is identical except for the `model_update` method. 
+We define a new component, `MyDiv` that inherits from `Div` and is identical except for the `model_update` method.
 The standard `model_update` method `Div` comes with is:
 ```python
 def model_update(self):
@@ -189,7 +197,7 @@ class MyDiv(jp.Div):
             self.text = self.initial_text
 
 
-def model_demo():
+def model_demo3():
     wp = jp.WebPage()
     d = jp.Div(classes='relative h-screen bg-gray-600', a=wp, data={'text': ''})
     repeat = 1
@@ -203,10 +211,7 @@ def model_demo():
                             placeholder='Type here', style='top: 50%; left: 40%', model=[d, 'text'], a=d)
     return wp
 
-jp.justpy(model_demo)
+jp.justpy(model_demo3)
 ```
 
- We add the two attributes `repeat` and `initial_text` to `MyDiv`. The first, `repeat` determines how many time the model value will be repeated in the text. We give each corner a different value. 
- 
- 
-
+ We add the two attributes `repeat` and `initial_text` to `MyDiv`. The first, `repeat` determines how many time the model value will be repeated in the text. We give each corner a different value.

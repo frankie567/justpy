@@ -4,7 +4,7 @@ Some advanced options in Ag-grid require providing a JavaScript function. The fi
 
 
 
-In the example below, [tree data mode](https://www.ag-grid.com/javascript-grid-tree-data/) is implemented. It is only available in the enterprise edition of ag-grid. 
+In the example below, [tree data mode](https://www.ag-grid.com/javascript-data-grid/tree-data/) is implemented. It is only available in the enterprise edition of ag-grid. 
 
 !!! warning
     Don't forget to set justpy.env to load the enterprise version of ag-grid
@@ -32,11 +32,11 @@ grid_options = {
     ]
 }
 
-def grid_test():
+def grid_test9():
     wp = jp.WebPage()
     grid = jp.AgGrid(a=wp, options=grid_options)
     grid.evaluate = ['getDataPath']
     return wp
 
-jp.justpy(grid_test)
+jp.justpy(grid_test9)
 ```

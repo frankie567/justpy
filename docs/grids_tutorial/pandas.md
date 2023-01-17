@@ -15,13 +15,13 @@ import pandas as pd
 
 wm_df = pd.read_csv('https://elimintz.github.io/women_majors.csv').round(2)
 
-def grid_test():
+def grid_test16():
     wp = jp.WebPage()
     grid = jp.AgGrid(a=wp)
     grid.load_pandas_frame(wm_df)
     return wp
 
-jp.justpy(grid_test)
+jp.justpy(grid_test16)
 ```
 
 Mouseover one of the column headers and click on the "three horizontal lines" <i class="fas fa-bars"></i> icon that appears to the right of the column name. You can now filter the data in the column. By clicking the arrows in the column heading you can sort the grid according to the values in the column.
@@ -31,31 +31,35 @@ Mouseover one of the column headers and click on the "three horizontal lines" <i
 JustPy comes with a pandas extension that makes loading panadas frames into a grid compatible with the Pandas syntax.
 The program below is equivalent to the one above:
 
+### load women_majors.csv with pandas
 ```python
 import justpy as jp
 import pandas as pd
 
 wm_df = pd.read_csv('https://elimintz.github.io/women_majors.csv').round(2)
 
-def grid_test():
+def grid_test17():
     wp = jp.WebPage()
-    wm_df.jp.ag_grid(a=wp)
+    grid = jp.AgGrid(a=wp, auto_size=True, style = "height: 99vh; width: 100%", theme='ag-theme-material')
+    grid.load_pandas_frame(wm_df)
+    print(grid.options.rowData)
     return wp
 
-jp.justpy(grid_test)
+jp.justpy(grid_test17)
 ```
 
 The JustPy functionality is added to pandas under the namespace "jp". The `ag_grid` method creates a grid based on the frame's data and returns an instance of AgGrid.
 
 The grid can be further modified after it is created:
 
+### load women_majors.csv with pandas and modify after creation
 ```python
 import justpy as jp
 import pandas as pd
 
 wm_df = pd.read_csv('https://elimintz.github.io/women_majors.csv').round(2)
 
-def grid_test():
+def grid_test18():
     wp = jp.WebPage()
     grid = wm_df.jp.ag_grid(a=wp)
     grid.options.pagination = True
@@ -70,7 +74,7 @@ def grid_test():
         }
     return wp
 
-jp.justpy(grid_test)
+jp.justpy(grid_test18)
 ```
 
 The example above sets the grid to be paginated instead of scrolled. The data is formatted so that any number under 20 is in a bold font and the background of the cell is red. Cells with values between 20 and 50 receive a background of yellow and those above 50 are green.

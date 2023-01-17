@@ -4,6 +4,9 @@ dist/
 justpy/__pycache__/
 test - Copy/
 examples/justpy.env
+.venv*/
+venv*/
+.env*/
 # 
 # IDEs
 #
@@ -13,7 +16,15 @@ examples/justpy.env
 .settings
 .project
 .pydevproject
+# VS Code
+.vscode/
+*.code-workspace
 # docs
-docs
+#docs
 # Mac
 .DS_Store
+# selenium test logs
+geckodriver.log
+# mkdocs
+site
+**/chinook.db
