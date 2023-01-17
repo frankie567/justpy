@@ -4,6 +4,3 @@
     {%- if context_obj %}
     {{ context_obj.as_html_lines() | safe }}
     {% endif %}
-<script>
-    window.justPyWebSocketURL = "{{ url_for('ws') }}";
-</script>

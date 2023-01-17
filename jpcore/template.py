@@ -112,6 +112,7 @@ class Context:
             {self.page_id_js}, // page_id
             '{self.title_js}', // title
             '{self.use_websockets_js}', // use_websockets
+            '{self.get_url_for('ws')}', // websocket_url
             '{self.redirect_js}', // redirect
             '{self.display_url_js}', // display_url
             {page_ready}, // page_ready

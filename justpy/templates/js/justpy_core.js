@@ -99,6 +99,7 @@ class JustpyCore {
 	 * @param {number} page_id - id of the page
 	 * @param title - title of the document
 	 * @param {boolean} use_websockets - If true use web sockets for communication otherwise ajax is used
+	 * @param websocket_url - URL of the WebSocket
 	 * @param redirect
 	 * @param display_url
 	 * @param page_ready
@@ -112,6 +113,7 @@ class JustpyCore {
 		page_id,
 		title,
 		use_websockets,
+		websocket_url,
 		redirect,
 		display_url,
 		page_ready,
@@ -124,6 +126,7 @@ class JustpyCore {
 		this.page_id = page_id;
 		this.setTitle(title);
 		this.use_websockets = use_websockets;
+		this.websocket_url = websocket_url;
 		if (redirect) {
 			location.href = redirect;
 		}
@@ -166,13 +169,7 @@ class JustpyCore {
 	 * prepare WebSocket handling
 	 */
 	setupWebSocket() {
-		console.log(location.protocol + ' Domain: ' + document.domain);
-		if (location.protocol === 'https:') {
-			var protocol_string = 'wss://'
-		} else {
-			protocol_string = 'ws://'
-		}
-		socket = new WebSocket(window.justPyWebSocketURL);
+		socket = new WebSocket(this.websocket_url);
 
 		socket.addEventListener('open', function(event) {
 			console.log('Websocket opened');
