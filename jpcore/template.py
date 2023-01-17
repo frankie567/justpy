@@ -102,7 +102,7 @@ class Context:
         page_ready = str(self.page_options.get_page_ready()).lower()
         result_ready = str(self.page_options.get_result_ready()).lower()
         reload_interval_ms = self.page_options.get_reload_interval_ms()
-        static_resources_url = self.get_url_for("static")
+        static_resources_url = self.get_url_for("static", path="")
         if static_resources_url is None:
             static_resources_url = "/"
         javascript = f"""let justpy_core=new JustpyCore(
